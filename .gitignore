@@ -48,3 +48,7 @@ jspm_packages
 
 .DS_Store
 .idea
+
+*.zip
+*.crx
+*.pem
