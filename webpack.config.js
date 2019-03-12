@@ -18,9 +18,18 @@ const env = process.env.NODE_ENV;
  * @type {boolean}
  */
 const IS_DEVELOPMENT = env === "development";
+/**
+ * 端口号
+ * @type {number}
+ */
+const WATCH_PORT = 8765;
 
 module.exports = {
     mode: env,
+    watch: IS_DEVELOPMENT,
+    devServer: {
+        port: WATCH_PORT
+    },
     entry: {
         'background': './src/background/index.ts',
         'popup': './src/popup/index.ts',
@@ -61,7 +70,7 @@ module.exports = {
     },
     plugins: [
         new ChromeExtensionReloader({
-            port: 8765,
+            port: WATCH_PORT,
             reloadPage: true,
             entries: {
                 contentScript: 'context-script',
@@ -69,8 +78,6 @@ module.exports = {
             }
         }),
         new copyWebpackPlugin([
-            {from: './manifest.json'},
-            {from: './src/popup/popup.html'},
             {from: './src/icon.png'}
         ]),
         new MiniCssExtractPlugin({

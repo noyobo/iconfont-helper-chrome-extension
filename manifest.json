@@ -1,8 +1,7 @@
 {
   "name": "iconfont-helper",
   "description": "支持iconfont一键添加购物车、一键购物车下载的等功能。http://github.com/dawangraoming",
-  "version": "1.2.0",
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "version": "$VERSION$",
   "background": {
     "scripts": [
       "background.js"
