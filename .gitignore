@@ -52,3 +52,5 @@ jspm_packages
 *.zip
 *.crx
 *.pem
+
+dist

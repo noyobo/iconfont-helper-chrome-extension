@@ -2,33 +2,23 @@
  * @author dawangraoming
  * @date 2018/06/25
  */
-import  './style.scss';
+///<reference path="../iconfont-helper.d.ts"/>
+
+import './style.scss';
 //
 // const $ = document.querySelector.bind(document);
 // const $$ = document.querySelectorAll.bind(document);
 
 import * as JSZip from 'jszip';
+import * as $ from 'jquery';
 
 let timeHandler: number;
+
 // 添加遮罩层，防止认为页面卡死
-const mask = document.createElement('div');
-const maskId = mask.id = '__dawangraoming_mask__';
-mask.style.cssText = `
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    background: rgba(0,0,0,0.5);
-    left: 0;
-    top: 0;
-    color: #FFF;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    display:none;
-    `;
-mask.innerText = '操作中，请稍后。。。';
+$('body').append(`
+<div style="display: none;" class="_dawangraoming_popup-mask" id="__dawangraoming_mask__">操作中，请稍后。。。</div>
+`);
+const mask = $('#__dawangraoming_mask__');
 
 /**
  * 将SVG转PNG数据
@@ -40,13 +30,8 @@ mask.innerText = '操作中，请稍后。。。';
 function createPNG(svg: string, size = 200, type?: string): Promise<string> {
     return new Promise(resolve => {
         const img = new Image();
-        const canvas = document.createElement('canvas');
-        canvas.style.cssText = `
-             position: absolute;
-             left:0;
-             top:0;
-             display:block;
-            `;
+        const canvas = ($.parseHTML(`
+                <canvas style="position:absolute;left:0;top:0;display:block;"></canvas>`)[0] as HTMLCanvasElement);
         document.body.appendChild(img);
         document.body.appendChild(canvas);
         // size = size ? size : 200;
@@ -84,11 +69,25 @@ function createPNG(svg: string, size = 200, type?: string): Promise<string> {
 }
 
 /**
+ * 通过DOM节点获取svg xml
+ * @param element {Element | JQuery}
+ * @param [index] {number}
+ */
+function getSVGFromNode(element: Element | JQuery, index = 0): string {
+    const dom = $(element);
+    // 获取SVG节点
+    const svg = dom.find('svg.icon');
+    // 获取SVG路径，去除掉无用的信息
+    return `<svg xmlns="${svg.attr('xmlns')}" viewBox="${svg.attr('viewBox')}" version="${svg.attr('version')}">${svg.html()}</svg>`;
+}
+
+/**
  * 下载模块
  * @param [type] {string} 可选，下载类型，支持png、svg，默认svg
  * @param [size] {number} 图像尺寸
+ * @return {Promise<void>}
  */
-async function download(type?: string, size?: number) {
+async function download(type?: IconFontHelper.imgType, size?: number): Promise<void> {
     // 获取所有购物车内的元素
     const iconList = document.querySelectorAll(".block-car-container .block-icon-list>li");
     if (!iconList || iconList.length < 1) return;
@@ -102,7 +101,7 @@ async function download(type?: string, size?: number) {
         // 获取图标的名词
         let name = liEle.querySelector('span.icon-name').textContent + ' ' + index;
         // 获取SVG路径，去除掉无用的信息
-        const text = `<svg xmlns="${svg.getAttribute('xmlns')}" viewBox="${svg.getAttribute('viewBox')}" version="${svg.getAttribute('version')}">${svg.innerHTML}</svg>`;
+        const text = getSVGFromNode(svg);
         if (type === 'svg' || !type) {
             name += '.svg';
             zipFile.file(name, text);
@@ -132,7 +131,7 @@ async function download(type?: string, size?: number) {
 
 
 function select(type: string) {
-    mask.style.display = 'flex';
+    mask.show();
     clearTimeout(timeHandler);
     // 高频操作前做一个延迟，防止遮罩层未渲染
     timeHandler = window.setTimeout(function () {
@@ -144,11 +143,12 @@ function select(type: string) {
             }
             (ele.querySelector('.icon-gouwuche1') as HTMLSpanElement).click();
         });
-        mask.style.display = 'none';
+        mask.hide();
     }, 300);
 }
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+// 注册监听事件
+chrome.runtime.onMessage.addListener(function (request: IconFontHelper.MessageType, sender, sendResponse) {
     switch (request.type) {
         case 'select-all':
             select('all');
@@ -177,25 +177,37 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     sendResponse('over');
 });
 
-// 插入复制按钮
-function appendCopyButton() {
-    const copyName = '_dawangraoming_copy-button';
-    if (!document.querySelector(`.block-icon-list li .icon-cover > span.${copyName}`)) {
-        const copyButton = document.createElement('span');
-        copyButton.className = `${copyName} cover-item iconfont cover-item-line`;
-        const domList = document.querySelectorAll('.block-icon-list li .icon-cover');
-        for (let i = 0; i < domList.length; i++) {
-            const dom = domList[i];
-            dom.appendChild(copyButton);
-        }
-    }
-}
 
-document.body.appendChild(mask);
-// 监听DOM，每次变动后都判断插入的元素是否存在，不存在则重新插入
-document.addEventListener('DOMSubtreeModified', function () {
-    if (!document.querySelector('#' + maskId)) {
-        document.body.appendChild(mask);
+
+const observer = new MutationObserver(function () {
+    const domList = $('.collection-detail .block-icon-list > li .icon-cover');
+    if (domList.length > 0) {
+        observer.disconnect();
+        domList.each(function () {
+            $(this).append(`
+            <span title="复制图标(SVG)" class="cover-item iconfont cover-item-line _dawangraoming_copy-button">复制</span>
+            `);
+        });
+        $(".collection-detail .block-icon-list").on('click', '._dawangraoming_copy-button', function () {
+            // 获取SVG XML
+            const text = getSVGFromNode($(this).closest('li[p-id]'));
+            const id = '_dawangraoming_copy';
+            // 插入一个输入框，用于复制功能
+            $('body').append(`<input readonly="readonly" id="${id}" />`);
+            const $input = $(`#${id}`);
+            $input.val(text);
+            $input.select();
+            // 执行复制
+            document.execCommand('copy');
+            // 用完就删，做个渣男
+            $input.remove();
+        });
     }
+});
+observer.observe(document.querySelector('#root'), {
+    subtree: true,
+    childList: true,
+    attributes: false,
+    characterData: false,
 });
 

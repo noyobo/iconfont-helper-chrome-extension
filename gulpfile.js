@@ -71,11 +71,18 @@ function generateVersion() {
         })).pipe(gulp.dest('./dist'));
 }
 
+/**
+ * 监听模块
+ */
 function webpackWatch() {
     webpack(webpackConfig).watch(200, function (err, stats) {
     });
 }
 
+/**
+ * 编译模块
+ * @param done
+ */
 function webpackBuild(done) {
     webpack(webpackConfig, function () {
         done();

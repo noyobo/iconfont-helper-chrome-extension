@@ -2,7 +2,9 @@
  * @author dawangraoming<admin@yeenuo.net>
  * @date 2018/6/25
  */
-require('./style.scss');
+import './style.scss';
+///<reference path="../iconfont-helper.d.ts"/>
+
 
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
@@ -15,7 +17,7 @@ $sizeInput.value = localStorage.getItem('_icon_font_site_') || '200';
  * @param data {object}
  * @param data.type {string} 事件类型
  */
-function sendMessage(data: { type: string, size: number }) {
+function sendMessage(data: IconFontHelper.MessageType) {
     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
         const params = Object.assign({target: 'content'}, data);
         // 向当前标签发出请求
@@ -48,8 +50,9 @@ $sizeInput.addEventListener('change', function () {
 
 
 // 获取当前页面地址
-chrome.tabs.getSelected(null, function (tab) {
+chrome.tabs.query({active: true}, function (tabs) {
     const $warning = $('#warning');
+    const tab = tabs[0];
     const url = tab.url;
     // 判断是否在iconfont站点内
     if (!(/^https?:\/\/(www.)?iconfont.cn/.test(url))) {
@@ -61,4 +64,3 @@ chrome.tabs.getSelected(null, function (tab) {
     $warning.style.display = 'none';
 
 });
-
