@@ -1,4 +1,4 @@
-![screen](https://github.com/dawangraoming/iconfont-helper-chrome-extension/blob/master/assets/screen.gif?raw=true)
+![screen](https://github.com/dawangraoming/iconfont-helper-chrome-extension/blob/master/assets/screen.jpg?raw=true)
 
 # <img src="https://github.com/dawangraoming/iconfont-helper-chrome-extension/blob/master/assets/logo.png?raw=true" width="60px" align="right" alt="conFont-helper icon"> IconFont-helper
 
