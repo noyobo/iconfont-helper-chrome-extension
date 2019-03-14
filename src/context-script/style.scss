@@ -22,4 +22,22 @@
   justify-content: center;
 }
 
+._dawangraoming_alert-message {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 999999;
+  transform: translateX(-50%), translateY(-50%);
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  user-select: none;
+  font-size: 14px;
+  color: #3a3a3a;
+  height: 44px;
+  padding: 0 28px;
+}
 

@@ -13,15 +13,17 @@
 [Google Chrome 商店](https://chrome.google.com/webstore/detail/naogknojdhkjjkbcjndmpkoleijgabdj)
 
 #### 方案二：离线安装
-1. [下载crx文件](https://github.com/dawangraoming/iconfont-helper-chrome-extension/releases/download/V1.1/iconfont-helper-chrome-extension.crx)
-2. 从Chrome浏览器`更多工具`中打开`扩展程序`
-3. 开启`开发者模式`
-4. 将crx文件拖入浏览器的`扩展程序`页面中
+1. [下载crx文件](https://github.com/dawangraoming/iconfont-helper-chrome-extension/releases/download/V1.2/iconfont-helper-chrome-extension.crx)
+- 使用`--enable-easy-off-store-extension-install`参数启动Chrome浏览器
+- 从Chrome浏览器`更多工具`中打开`扩展程序`
+- 开启`开发者模式`
+- 将crx文件拖入浏览器的`扩展程序`页面中
 
 ## 更新日志
 
 ### v1.2
 增加图标一键复制功能；
+增加`图像尺寸`记录上次设置的数值功能；
 增加一键设置当前页面中所有图标的颜色功能。
 
 ### v1.1

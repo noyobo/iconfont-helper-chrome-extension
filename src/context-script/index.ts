@@ -73,12 +73,17 @@ function createPNG(svg: string, size = 200, type?: string): Promise<string> {
  * @param element {Element | JQuery}
  * @param [index] {number}
  */
-function getSVGFromNode(element: Element | JQuery, index = 0): string {
+function getSVGFromNode(element: Element | JQuery, index = 0): { data: string, name: string } {
     const dom = $(element);
+    const name = dom.find('span.icon-name').text();
     // 获取SVG节点
     const svg = dom.find('svg.icon');
     // 获取SVG路径，去除掉无用的信息
-    return `<svg xmlns="${svg.attr('xmlns')}" viewBox="${svg.attr('viewBox')}" version="${svg.attr('version')}">${svg.html()}</svg>`;
+    const data = `<svg xmlns="${svg.attr('xmlns')}" viewBox="${svg.attr('viewBox')}" version="${svg.attr('version')}">${svg.html()}</svg>`
+    return {
+        data,
+        name
+    };
 }
 
 /**
@@ -95,19 +100,17 @@ async function download(type?: IconFontHelper.imgType, size?: number): Promise<v
     let zipFile = new JSZip();
 
     for (let index = 0; index < iconList.length; index++) {
-        const liEle = iconList[index];
-        // 获取SVG DOM
-        const svg = liEle.querySelector('svg.icon');
-        // 获取图标的名词
-        let name = liEle.querySelector('span.icon-name').textContent + ' ' + index;
+        // 获取SVG的信息与名称
         // 获取SVG路径，去除掉无用的信息
-        const text = getSVGFromNode(svg);
+        let {data, name} = getSVGFromNode(iconList[index]);
+        // 获取图标的名词
+        name = name + ' ' + index;
         if (type === 'svg' || !type) {
             name += '.svg';
-            zipFile.file(name, text);
+            zipFile.file(name, data);
         } else {
             name += '.' + type;
-            let pngFile = await createPNG(text, size, type);
+            let pngFile = await createPNG(data, size, type);
             pngFile = pngFile.replace(/^data:image\/\w+;base64,/, '');
             zipFile.file(name, pngFile, {base64: true});
         }
@@ -130,6 +133,10 @@ async function download(type?: IconFontHelper.imgType, size?: number): Promise<v
 }
 
 
+/**
+ * 选取图标进购物车
+ * @param type
+ */
 function select(type: string) {
     mask.show();
     clearTimeout(timeHandler);
@@ -145,6 +152,14 @@ function select(type: string) {
         });
         mask.hide();
     }, 300);
+}
+
+/**
+ * 设置图标色
+ * @param [color] {string}
+ */
+function setIconColor(color: string = '') {
+    $('#magix_vf_main .block-icon-list > li svg path').css('fill', color);
 }
 
 // 注册监听事件
@@ -173,37 +188,64 @@ chrome.runtime.onMessage.addListener(function (request: IconFontHelper.MessageTy
         case 'download-webp':
             download('webp', request.size);
             break;
+
+        case 'set-icon-color':
+            setIconColor(request.color);
+            break;
     }
     sendResponse('over');
 });
 
+/**
+ * 弹窗消息
+ * @param str
+ * @return {Promise<void>}
+ */
+function alertMessage(str: string): Promise<void> {
+    const dom = $($.parseHTML(`<p class="_dawangraoming_alert-message">${str}</p>`)[0]);
+    $('body').append(dom);
+    return new Promise(resolve => {
+        dom.delay(800).fadeOut(300, function () {
+            dom.remove();
+            resolve();
+        });
+    })
+}
 
 
 const observer = new MutationObserver(function () {
+    // 判断图标列表是否渲染
     const domList = $('.collection-detail .block-icon-list > li .icon-cover');
     if (domList.length > 0) {
+        // 注销监听
         observer.disconnect();
+        // 对每个图标都插入一个复制按钮
         domList.each(function () {
             $(this).append(`
             <span title="复制图标(SVG)" class="cover-item iconfont cover-item-line _dawangraoming_copy-button">复制</span>
             `);
         });
+        // 注册事件监听
         $(".collection-detail .block-icon-list").on('click', '._dawangraoming_copy-button', function () {
             // 获取SVG XML
-            const text = getSVGFromNode($(this).closest('li[p-id]'));
+            const {data, name} = getSVGFromNode($(this).closest('li[p-id]'));
             const id = '_dawangraoming_copy';
             // 插入一个输入框，用于复制功能
             $('body').append(`<input readonly="readonly" id="${id}" />`);
             const $input = $(`#${id}`);
-            $input.val(text);
+            $input.val(data);
             $input.select();
             // 执行复制
             document.execCommand('copy');
             // 用完就删，做个渣男
             $input.remove();
+            // 弹出信息通知
+            alertMessage(`${name}, 复制成功`);
         });
     }
 });
+
+// 对root节点以及子节点变更进行监听
 observer.observe(document.querySelector('#root'), {
     subtree: true,
     childList: true,

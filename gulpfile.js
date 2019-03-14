@@ -89,9 +89,11 @@ function webpackBuild(done) {
     });
 }
 
-const watch = gulp.series(cleanDist, gulp.parallel(generateVersion, webpackWatch));
-const build = gulp.series(cleanDist, gulp.parallel(generateVersion, webpackBuild));
 
+const watch = gulp.parallel(generateVersion, webpackWatch);
+const build = gulp.parallel(generateVersion, webpackBuild);
+
+exports.clean = cleanDist;
 exports.watch = watch;
 exports.build = build;
 exports.default = build;

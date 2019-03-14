@@ -11,11 +11,13 @@ declare namespace IconFontHelper {
     type downloadPng = 'download-png';
     type downloadJpg = 'download-jpg';
     type downloadWebp = 'download-webp';
+    type setIconColor = 'set-icon-color';
 
     type imgType = 'jpg' | 'png' | 'svg' | 'webp';
 
     interface MessageType {
-        type: selectInvert | selectAll | downloadSvg | downloadPng | downloadJpg | downloadWebp,
+        type: selectInvert | selectAll | downloadSvg | downloadPng | downloadJpg | downloadWebp | setIconColor,
         size?: number,
+        color?: string,
     }
 }

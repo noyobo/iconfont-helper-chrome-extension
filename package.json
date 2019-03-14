@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "serve": "cross-env NODE_ENV=development gulp watch",
-    "build": "cross-env NODE_ENV=production gulp"
+    "build": "cross-env NODE_ENV=production gulp",
+    "clean": "gulp clean"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.81",
@@ -31,6 +32,7 @@
   },
   "dependencies": {
     "jquery": "^3.3.1",
-    "jszip": "^3.2.0"
+    "jszip": "^3.2.0",
+    "vue": "^2.6.8"
   }
 }

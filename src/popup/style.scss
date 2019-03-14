@@ -7,6 +7,7 @@ body {
   width: 270px;
   padding: 10px 20px;
   min-height: 185px;
+  font-size: 12px;
 }
 
 h1.title {
@@ -101,18 +102,35 @@ a {
   color: #2879d6;
 }
 
-.size-input-wrap {
+.input-wrap {
   font-size: 12px;
   margin-top: 10px;
 
-  > label {
-    margin-right: 10px;
+  &.color-input-wrap {
+    label.input-common {
+      position: relative;
+
+      .color-preview {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        right: 14px;
+        top: 3px;
+        border-radius: 50%;
+        border: 1px solid #e0e0e0;
+      }
+    }
   }
 
-  > input {
-    width: 100px;
-    height: 30px;
-    padding: 5px;
-    box-sizing: border-box;
+  label.input-common {
+
+
+    > input {
+      margin-left: 10px;
+      width: 100px;
+      height: 30px;
+      padding: 5px;
+      box-sizing: border-box;
+    }
   }
 }
