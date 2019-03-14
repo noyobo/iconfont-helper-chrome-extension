@@ -30,8 +30,8 @@ const mask = $('#__dawangraoming_mask__');
 function createPNG(svg: string, size = 200, type?: string): Promise<string> {
     return new Promise(resolve => {
         const img = new Image();
-        const canvas = ($.parseHTML(`
-                <canvas style="position:absolute;left:0;top:0;display:block;"></canvas>`)[0] as HTMLCanvasElement);
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'position:absolute;left:0;top:0;display:block;';
         document.body.appendChild(img);
         document.body.appendChild(canvas);
         // size = size ? size : 200;
@@ -61,8 +61,8 @@ function createPNG(svg: string, size = 200, type?: string): Promise<string> {
         img.onload = function () {
             ctx.drawImage(img, 0, 0, size, size);
             resolve(canvas.toDataURL(compileType));
-            canvas.remove();
-            img.remove();
+            $(canvas).remove();
+            $(img).remove();
         };
         img.src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
     });
@@ -202,7 +202,7 @@ chrome.runtime.onMessage.addListener(function (request: IconFontHelper.MessageTy
  * @return {Promise<void>}
  */
 function alertMessage(str: string): Promise<void> {
-    const dom = $($.parseHTML(`<p class="_dawangraoming_alert-message">${str}</p>`)[0]);
+    const dom = $(`<p class="_dawangraoming_alert-message">${str}</p>`);
     $('body').append(dom);
     return new Promise(resolve => {
         dom.delay(800).fadeOut(300, function () {

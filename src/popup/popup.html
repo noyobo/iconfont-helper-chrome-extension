@@ -12,8 +12,8 @@
         <dl class="control-group">
             <dt>购物车操作</dt>
             <dd>
-                <button class="control-button" data-type="select-all">添加全部</button>
-                <button class="control-button" data-type="select-invert">反选</button>
+                <button class="control-button" @click="select('select-all')">添加全部</button>
+                <button class="control-button" @click="select('select-invert')">反选</button>
             </dd>
         </dl>
         <dl class="control-group">

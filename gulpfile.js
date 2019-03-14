@@ -58,14 +58,7 @@ function transformFromStream(transform) {
  */
 function generateVersion() {
     return gulp.src(['./src/popup/popup.html', './manifest.json'])
-        .pipe(transformFromStream(({contents, fileName}) => {
-            // 如果是manifest文件，在开发模式下，就去除安全限制
-            // 因为webpack开发模式下使用eval更新JS，插件默认会被禁用eval执行
-            if (IS_DEVELOPMENT && fileName === 'manifest.json') {
-                const json = JSON.parse(contents);
-                json['content_security_policy'] = `script-src 'self' 'unsafe-eval'; object-src 'self'`;
-                contents = JSON.stringify(json);
-            }
+        .pipe(transformFromStream(({contents}) => {
             // 自动填充版本号
             return contents.replace(/\$VERSION\$/, version);
         })).pipe(gulp.dest('./dist'));

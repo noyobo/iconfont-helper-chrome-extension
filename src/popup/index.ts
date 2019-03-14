@@ -5,10 +5,12 @@
 ///<reference path="../iconfont-helper.d.ts"/>
 import './style.scss';
 
-const Vue = require('../../node_modules/vue/dist/vue.min.js');
+const Vue = process.env.NODE_ENV === 'development' ?
+    require('../../node_modules/vue/dist/vue.js')
+    : require('../../node_modules/vue/dist/vue.min.js');
 
 const app = new Vue({
-    el: '#root',
+    el: "#root",
     data() {
         return {
             throttleHandler: 0,
@@ -41,6 +43,13 @@ const app = new Vue({
                     console.log("response =>" + response);
                 });
             });
+        },
+        /**
+         * 选择图标操作
+         * @param type
+         */
+        select(type: string) {
+            return this.sendMessage({type});
         },
         /**
          * 下载事件
