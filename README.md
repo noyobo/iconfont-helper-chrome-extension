@@ -14,10 +14,10 @@
 
 #### 方案二：离线安装
 1. [下载crx文件](https://github.com/dawangraoming/iconfont-helper-chrome-extension/releases/download/V1.2/iconfont-helper-chrome-extension.crx)
-- 使用`--enable-easy-off-store-extension-install`参数启动Chrome浏览器
-- 从Chrome浏览器`更多工具`中打开`扩展程序`
-- 开启`开发者模式`
-- 将crx文件拖入浏览器的`扩展程序`页面中
+2. 使用`--enable-easy-off-store-extension-install`参数启动Chrome浏览器
+3. 从Chrome浏览器`更多工具`中打开`扩展程序`
+4. 开启`开发者模式`
+5. 将crx文件拖入浏览器的`扩展程序`页面中
 
 ## 更新日志
 
