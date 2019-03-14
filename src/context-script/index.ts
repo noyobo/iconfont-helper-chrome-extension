@@ -142,7 +142,7 @@ function select(type: string) {
     clearTimeout(timeHandler);
     // 高频操作前做一个延迟，防止遮罩层未渲染
     timeHandler = window.setTimeout(function () {
-        const iconList = document.querySelectorAll("#magix_vf_main .block-icon-list>li");
+        const iconList = document.querySelectorAll("#magix_vf_main .block-icon-list > li");
         Array.from(iconList).forEach(ele => {
             // 如果是全选，则排除掉已经选中的元素
             if (type === 'all') {
@@ -215,7 +215,7 @@ function alertMessage(str: string): Promise<void> {
 
 const observer = new MutationObserver(function () {
     // 判断图标列表是否渲染
-    const domList = $('.collection-detail .block-icon-list > li .icon-cover');
+    const domList = $('#magix_vf_main .block-icon-list > li .icon-cover');
     if (domList.length > 0) {
         // 注销监听
         observer.disconnect();
