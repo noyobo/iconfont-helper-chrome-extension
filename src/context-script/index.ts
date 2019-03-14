@@ -226,7 +226,7 @@ const observer = new MutationObserver(function () {
             `);
         });
         // 注册事件监听
-        $(".collection-detail .block-icon-list").on('click', '._dawangraoming_copy-button', function () {
+        $("#magix_vf_main .block-icon-list").on('click', '._dawangraoming_copy-button', function () {
             // 获取SVG XML
             const {data, name} = getSVGFromNode($(this).closest('li[p-id]'));
             const id = '_dawangraoming_copy';

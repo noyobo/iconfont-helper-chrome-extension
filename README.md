@@ -13,7 +13,7 @@
 [Google Chrome 商店](https://chrome.google.com/webstore/detail/naogknojdhkjjkbcjndmpkoleijgabdj)
 
 #### 方案二：离线安装
-1. [下载crx文件](https://github.com/dawangraoming/iconfont-helper-chrome-extension/releases/download/V1.2/iconfont-helper-chrome-extension.crx)
+1. 从[Releases](https://github.com/dawangraoming/iconfont-helper-chrome-extension/releases)中下载最新的`crx`文件
 2. 使用`--enable-easy-off-store-extension-install`参数启动Chrome浏览器
 3. 从Chrome浏览器`更多工具`中打开`扩展程序`
 4. 开启`开发者模式`
