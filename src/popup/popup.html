@@ -1,53 +1,59 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>popup</title>
-    <link rel="stylesheet" href="popup.css">
-</head>
-<body>
-<div id="root">
-    <h1 class="title">IconFont Helper <span class="version">($VERSION$)</span></h1>
-    <div class="main">
-        <dl class="control-group">
-            <dt>购物车操作</dt>
-            <dd>
-                <button class="control-button" @click="select('select-all')">添加全部</button>
-                <button class="control-button" @click="select('select-invert')">反选</button>
-            </dd>
-        </dl>
-        <dl class="control-group">
-            <dt>一键下载购物车内素材</dt>
-            <dt>
-                <button class="control-button" v-for="type in saveTypes" :key="type"
-                        @click="download(type)">{{type | uppercase}}
-                </button>
-                <p class="input-wrap">
-                    <label class="input-common">
-                        <span>图像尺寸</span>
-                        <input v-model="iconSize" placeholder="输出图像的尺寸" type="number"/>
-                    </label>
-                </p>
-            </dt>
-        </dl>
-        <dl class="control-group">
-            <dt>设置当前页面图标颜色</dt>
-            <dt>
-                <p class="input-wrap color-input-wrap">
-                    <label class="input-common">
-                        <span>颜色</span>
-                        <input v-model="iconColor" placeholder="图标颜色" type="text"/>
-                        <span class="color-preview" :style="{background: iconColor}"></span>
-                    </label>
-                    <button class="control-button" @click="applyColor">应用</button>
-                    <button class="control-button" @click="resetColor">恢复</button>
-                </p>
-            </dt>
-        </dl>
-    </div>
-    <p class="warning" v-if="!isSupport">当前站点不支持此功能</p>
-    <p class="copyright">developed by <a href="http://www.yeenuo.net" target="_blank">DaWangRaoMing</a></p>
-</div>
-<script src="popup.js"></script>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<title>popup</title>
+		<link rel="stylesheet" href="popup.css" />
+	</head>
+	<body>
+		<div id="root">
+			<h1 class="title">IconFont Helper <span class="version">($VERSION$)</span></h1>
+			<div class="main">
+				<dl class="control-group">
+					<dt>添加入库</dt>
+					<dd>
+						<button class="control-button" @click="select('select-all')">全选</button>
+						<button class="control-button" @click="select('select-invert')">反选</button>
+					</dd>
+				</dl>
+				<dl class="control-group">
+					<dt>一键下载购物车内素材</dt>
+					<dd>
+						<button class="control-button" v-for="type in saveTypes" :key="type" @click="download(type)">
+							{{ type | uppercase }}
+						</button>
+					</dd>
+					<dd>
+						<label class="input-common">
+							<span>图像尺寸</span>
+							<input
+								min="32"
+								max="1024"
+								v-model="iconSize"
+								placeholder="输出图像的尺寸"
+								type="number"
+								step="16"
+							/>
+						</label>
+					</dd>
+				</dl>
+				<dl class="control-group">
+					<dt>设置当前页面图标颜色</dt>
+					<dd>
+						<label class="input-common">
+							<span>颜色</span>
+							<input v-model="iconColor" placeholder="图标颜色" type="color" />
+						</label>
+						<button class="control-button" @click="applyColor">
+							应用
+						</button>
+						<button class="control-button" @click="resetColor">恢复</button>
+					</dd>
+				</dl>
+			</div>
+			<p class="warning" v-if="!isSupport">当前站点不支持此功能</p>
+			<p class="copyright">developed by <a href="http://www.yeenuo.net" target="_blank">DaWangRaoMing</a></p>
+		</div>
+		<script src="popup.js"></script>
+	</body>
 </html>
