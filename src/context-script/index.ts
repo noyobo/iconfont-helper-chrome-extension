@@ -27,14 +27,14 @@ const mask = $('#__dawangraoming_mask__');
  * @param [type] {string} 下载类型，支持png、GIF、
  * @return {Promise<string>} 返回一个Promise
  */
-function createPNG(svg: string, size = 200, type?: string): Promise<string> {
+function createPNG(svg: string, size: number = 256, type?: IconFontHelper.imgType): Promise<string> {
 	return new Promise(resolve => {
 		const img = new Image();
 		const canvas = document.createElement('canvas');
 		canvas.style.cssText = 'position:absolute;left:0;top:0;display:block;';
 		document.body.appendChild(img);
 		document.body.appendChild(canvas);
-		// size = size ? size : 200;
+		// size = size ? size : 256;
 		canvas.width = size;
 		canvas.height = size;
 		const ctx = canvas.getContext('2d');
@@ -73,7 +73,7 @@ function createPNG(svg: string, size = 200, type?: string): Promise<string> {
  * @param element {Element | JQuery}
  * @param [index] {number}
  */
-function getSVGFromNode(element: Element | JQuery, index = 0): { data: string; name: string } {
+function getSVGFromNode(element: Element | JQuery, index: number = 0): { data: string; name: string } {
 	const dom = $(element);
 	const name = dom.find('span.icon-name').text();
 	// 获取SVG节点
