@@ -20,9 +20,9 @@ const app = new Vue({
 			// 保存类型
 			saveTypes: ['svg', 'png', 'jpg', 'webp'],
 			// 图标大小
-			iconSize: +localStorage.getItem('_icon_font_site_') || 200,
+			iconSize: +localStorage.getItem('_icon_font_site_') || 256,
 			// 图标颜色
-			iconColor: localStorage.getItem('_icon_font_color_') || ''
+			iconColor: localStorage.getItem('_icon_font_color_') || '#333333'
 		};
 	},
 	filters: {
